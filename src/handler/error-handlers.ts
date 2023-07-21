@@ -11,7 +11,7 @@ export const errorHandler: ErrorRequestHandler = (
     next: NextFunction,
 ) => {
     res.status(err.status || 500);
-    res.json({ error: err.message, stack: process.env.NODE_ENV !== "production" ? err.stack : null });
+    res.json({ error: err.message, ...(process.env.NODE_ENV === "production" ? { stack: err.stack } : null) });
 };
 
 export const requestBodyErrorHandler = (req: Request, res: Response, next: NextFunction) => {
