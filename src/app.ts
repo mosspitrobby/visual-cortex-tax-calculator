@@ -2,7 +2,7 @@ import express, { type Request, type Express, type Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import router from "./routes/routes";
-import { errorHandler, requestBodyErrorHandler } from "./handler/error-handlers";
+import { errorHandler } from "./handler/error-handlers";
 
 dotenv.config();
 const port: string | number = process.env.PORT || "3000";
@@ -16,7 +16,6 @@ app.get("/", (req: Request, res: Response) => {
     res.json({ message: "Welcome to the Visual Cortex tax calculator!" });
 });
 
-app.use(requestBodyErrorHandler);
 app.use("/api", router);
 
 app.use(errorHandler);

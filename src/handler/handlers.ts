@@ -6,7 +6,7 @@ import taxRates from "../tax-rates/tax-rates";
 export default function calculateTaxHander(req: Request, res: Response) {
     const info: IncomeInfo = req.body;
 
-    const taxRateTable: TaxRateTable = taxRates[info.year];
+    const taxRateTable: TaxRateTable | undefined = taxRates[info.year];
     if (!taxRateTable) {
         const error: ResponseError = new Error("Cannot find tax rate table for year.");
         throw error;
@@ -22,11 +22,11 @@ export default function calculateTaxHander(req: Request, res: Response) {
         throw error;
     }
 
-    let taxable = 0;
+    let tax = 0;
 
     if (taxBracket.min !== 0) {
-        taxable = taxBracket.base + (info.income - (taxBracket.min - 1)) * taxBracket.rate;
+        tax = taxBracket.base + (info.income - (taxBracket.min - 1)) * taxBracket.rate;
     }
 
-    return res.json({ message: `The estimated tax on your taxable income is: ${formatterAUD.format(taxable)}` });
+    return res.json({ tax: formatterAUD.format(tax) });
 }
